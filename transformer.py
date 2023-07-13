@@ -9,13 +9,10 @@ import numpy as np
 
 class PositionalEmbedding(tf.keras.layers.Layer):
     
-    # TODO: Change up.
     def __positional_encoding(self, depth, length = 2048):
-        depth = depth / 2
-        positions = np.arange(length)[:, np.newaxis]
-        depths = np.arange(depth)[np.newaxis, :] / depth
-        angle_rates = 1 / (10000**depths)
-        angle_rads = positions * angle_rates
+        depth /= 2
+        depths = np.asarray([i for i in range(int(depth))])[np.newaxis, :] / depth
+        angle_rads = np.asarray([i for i in range(int(length))])[:, np.newaxis] * np.asarray([1 / (10000**i) for i in depths])
         pos_encoding = np.concatenate(
             [np.sin(angle_rads), np.cos(angle_rads)],
             axis = -1
